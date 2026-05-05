@@ -1,5 +1,7 @@
 package com.drios.sudoku.core;
 
+import java.io.PrintStream;
+
 /**
  * Represents the state of a 9×9 Sudoku board.
  *
@@ -247,6 +249,42 @@ public class SudokuBoard {
             }
         }
         return true;
+    }
+
+    // -------------------------------------------------------------------------
+    // Visualization — T008
+    // -------------------------------------------------------------------------
+
+    /**
+     * Prints the board to standard output.
+     */
+    public void printBoard() {
+        printBoard(System.out);
+    }
+
+    /**
+     * Prints the board to the specified {@code PrintStream}.
+     *
+     * <p>Empty cells are printed as dots (.), and digits 1–9 are printed
+     * as they are. Horizontal and vertical dividers are added every 3 cells
+     * to improve readability.</p>
+     *
+     * @param ps the stream to print to (e.g., System.out or a capture stream)
+     */
+    public void printBoard(final PrintStream ps) {
+        for (int r = 0; r < SIZE; r++) {
+            if (r > 0 && r % 3 == 0) {
+                ps.println("------+-------+------");
+            }
+            for (int c = 0; c < SIZE; c++) {
+                if (c > 0 && c % 3 == 0) {
+                    ps.print("| ");
+                }
+                int value = board[r][c];
+                ps.print(value == EMPTY_CELL ? ". " : value + " ");
+            }
+            ps.println();
+        }
     }
 }
 

@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -340,6 +343,44 @@ class SudokuBoardTest {
             for (int c = 0; c < 9; c++) {
                 board.setValue(r, c, solution[r][c], false);
             }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // printBoard — T008
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("printBoard_should_outputCorrectGridStructure")
+    void printBoard_should_outputCorrectGridStructure() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        
+        board.setValue(0, 0, 5, false);
+        board.printBoard(ps);
+        
+        String output = baos.toString();
+        // Check for basic structure elements
+        assertTrue(output.contains("|"), "Should contain vertical dividers");
+        assertTrue(output.contains("---"), "Should contain horizontal dividers");
+        
+        // The value 5 should be at the start of the first line (or close to it)
+        assertTrue(output.contains("5"), "Should contain the board values");
+    }
+
+    @Test
+    @DisplayName("printBoard_should_printAllCells")
+    void printBoard_should_printAllCells() {
+        fillValidBoard(board);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        
+        board.printBoard(ps);
+        String output = baos.toString();
+        
+        // For a solved board, all digits 1-9 should appear multiple times
+        for (int i = 1; i <= 9; i++) {
+            assertTrue(output.contains(String.valueOf(i)), "Should contain digit " + i);
         }
     }
 }
