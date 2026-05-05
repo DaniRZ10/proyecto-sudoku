@@ -285,5 +285,62 @@ class SudokuBoardTest {
         board.placeNumber(5, 5, 4); // same value on same non-fixed cell is valid
         assertEquals(4, board.getValue(5, 5));
     }
+
+    // -------------------------------------------------------------------------
+    // isSolved — T007
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("isSolved_should_returnFalse_when_boardIsEmpty")
+    void isSolved_should_returnFalse_when_boardIsEmpty() {
+        assertFalse(board.isSolved());
+    }
+
+    @Test
+    @DisplayName("isSolved_should_returnFalse_when_boardIsIncomplete")
+    void isSolved_should_returnFalse_when_boardIsIncomplete() {
+        fillValidBoard(board);
+        board.setValue(8, 8, 0, false); // Make one cell empty
+        assertFalse(board.isSolved());
+    }
+
+    @Test
+    @DisplayName("isSolved_should_returnTrue_when_boardIsFullAndValid")
+    void isSolved_should_returnTrue_when_boardIsFullAndValid() {
+        fillValidBoard(board);
+        assertTrue(board.isSolved());
+    }
+
+    @Test
+    @DisplayName("isSolved_should_returnFalse_when_boardIsFullButHasConflicts")
+    void isSolved_should_returnFalse_when_boardIsFullButHasConflicts() {
+        fillValidBoard(board);
+        // Introduce a conflict: duplicate value in a row
+        // (Changing [0][0] from 5 to 3 creates a conflict with [0][1])
+        board.setValue(0, 0, 3, false); 
+        assertFalse(board.isSolved());
+    }
+
+    /**
+     * Helper to fill a board with a known valid solution.
+     */
+    private void fillValidBoard(SudokuBoard board) {
+        int[][] solution = {
+            {5, 3, 4, 6, 7, 8, 9, 1, 2},
+            {6, 7, 2, 1, 9, 5, 3, 4, 8},
+            {1, 9, 8, 3, 4, 2, 5, 6, 7},
+            {8, 5, 9, 7, 6, 1, 4, 2, 3},
+            {4, 2, 6, 8, 5, 3, 7, 9, 1},
+            {7, 1, 3, 9, 2, 4, 8, 5, 6},
+            {9, 6, 1, 5, 3, 7, 2, 8, 4},
+            {2, 8, 7, 4, 1, 9, 6, 3, 5},
+            {3, 4, 5, 2, 8, 6, 1, 7, 9}
+        };
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                board.setValue(r, c, solution[r][c], false);
+            }
+        }
+    }
 }
 

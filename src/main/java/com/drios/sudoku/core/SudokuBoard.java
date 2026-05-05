@@ -223,5 +223,30 @@ public class SudokuBoard {
         }
         board[row][column] = value;
     }
+
+    /**
+     * Checks if the board is completely and correctly solved.
+     *
+     * <p>The board is considered solved if every cell contains a value between
+     * 1 and 9 and no Sudoku rules are violated.</p>
+     *
+     * @return {@code true} if the board is solved; {@code false} otherwise
+     */
+    public boolean isSolved() {
+        for (int r = 0; r < SIZE; r++) {
+            for (int c = 0; c < SIZE; c++) {
+                int value = board[r][c];
+                if (value == EMPTY_CELL) {
+                    return false;
+                }
+                if (isValueInRow(r, c, value)
+                        || isValueInColumn(r, c, value)
+                        || isValueInBox(r, c, value)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
