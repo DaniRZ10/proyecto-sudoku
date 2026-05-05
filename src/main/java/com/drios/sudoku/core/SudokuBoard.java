@@ -196,4 +196,32 @@ public class SudokuBoard {
         }
         return false;
     }
+
+    // -------------------------------------------------------------------------
+    // Player move — T006
+    // -------------------------------------------------------------------------
+
+    /**
+     * Places {@code value} at ({@code row}, {@code column}) on behalf of the player.
+     *
+     * <p>This is the primary entry point for player moves. The method first
+     * validates the move via {@link #isMovementValid(int, int, int)}; if the
+     * move is illegal for any reason (out-of-bounds coordinates, invalid value,
+     * fixed cell, or Sudoku rule violation) an {@link InvalidMoveException} is
+     * thrown and the board state is left unchanged.</p>
+     *
+     * @param row    zero-based row index (0–8)
+     * @param column zero-based column index (0–8)
+     * @param value  the digit to place (1–9)
+     * @throws InvalidMoveException if the move violates any Sudoku rule or
+     *                              targets an out-of-range or fixed cell
+     */
+    public void placeNumber(final int row, final int column, final int value) {
+        if (!isMovementValid(row, column, value)) {
+            throw new InvalidMoveException(
+                    "Invalid move: value=" + value + " at [" + row + "][" + column + "]");
+        }
+        board[row][column] = value;
+    }
 }
+

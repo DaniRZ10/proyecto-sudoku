@@ -204,4 +204,86 @@ class SudokuBoardTest {
         assertTrue(board.isMovementValid(4, 4, 3),
                 "Placing the same value on its own non-fixed cell should be valid");
     }
+
+    // -------------------------------------------------------------------------
+    // placeNumber — T006
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("placeNumber_should_updateBoard_when_moveIsLegal")
+    void placeNumber_should_updateBoard_when_moveIsLegal() {
+        board.placeNumber(0, 0, 5);
+        assertEquals(5, board.getValue(0, 0));
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_notMarkCellAsFixed_when_playerPlacesValue")
+    void placeNumber_should_notMarkCellAsFixed_when_playerPlacesValue() {
+        board.placeNumber(1, 2, 7);
+        assertFalse(board.isCellFixed(1, 2),
+                "Player-placed values must never become fixed");
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_throwInvalidMoveException_when_rowConflictExists")
+    void placeNumber_should_throwInvalidMoveException_when_rowConflictExists() {
+        board.setValue(0, 0, 3, false);
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(0, 5, 3),
+                "Expected InvalidMoveException for row conflict");
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_throwInvalidMoveException_when_columnConflictExists")
+    void placeNumber_should_throwInvalidMoveException_when_columnConflictExists() {
+        board.setValue(0, 4, 8, false);
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(6, 4, 8),
+                "Expected InvalidMoveException for column conflict");
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_throwInvalidMoveException_when_boxConflictExists")
+    void placeNumber_should_throwInvalidMoveException_when_boxConflictExists() {
+        board.setValue(6, 6, 2, false);
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(7, 7, 2),
+                "Expected InvalidMoveException for 3x3 box conflict");
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_throwInvalidMoveException_when_cellIsFixed")
+    void placeNumber_should_throwInvalidMoveException_when_cellIsFixed() {
+        board.setValue(3, 3, 6, true);
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(3, 3, 1),
+                "Expected InvalidMoveException when targeting a fixed cell");
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_throwInvalidMoveException_when_valueIsOutOfRange")
+    void placeNumber_should_throwInvalidMoveException_when_valueIsOutOfRange() {
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(0, 0, 0));
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(0, 0, 10));
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_throwInvalidMoveException_when_coordinatesAreOutOfRange")
+    void placeNumber_should_throwInvalidMoveException_when_coordinatesAreOutOfRange() {
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(-1, 0, 5));
+        assertThrows(InvalidMoveException.class,
+                () -> board.placeNumber(0, 9, 5));
+    }
+
+    @Test
+    @DisplayName("placeNumber_should_overwritePreviousValue_when_moveIsLegal")
+    void placeNumber_should_overwritePreviousValue_when_moveIsLegal() {
+        board.placeNumber(5, 5, 4);
+        board.placeNumber(5, 5, 4); // same value on same non-fixed cell is valid
+        assertEquals(4, board.getValue(5, 5));
+    }
 }
+
