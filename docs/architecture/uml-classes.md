@@ -23,14 +23,13 @@ classDiagram
         -fixedCells: boolean[9][9]
         +SudokuBoard()
         +getValue(row: int, column: int) int
-        +setValue(row: int, column: int, value: int) void
+        +setValue(row: int, column: int, value: int, fixed: boolean) void
         +isCellFixed(row: int, column: int) boolean
-        +setCellFixed(row: int, column: int, fixed: boolean) void
         +isMovementValid(row: int, column: int, value: int) boolean
         +placeNumber(row: int, column: int, value: int) void
         +isSolved() boolean
         +printBoard() void
-        +printBoard(out: PrintStream) void
+        +printBoard(ps: PrintStream) void
     }
 
     class SudokuGenerator {
