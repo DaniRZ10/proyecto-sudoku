@@ -85,4 +85,115 @@ public class SudokuBoard {
     public boolean isCellFixed(final int row, final int column) {
         return fixedCells[row][column];
     }
+
+    // -------------------------------------------------------------------------
+    // Validation — T005
+    // -------------------------------------------------------------------------
+
+    /**
+     * Determines whether placing {@code value} at ({@code row}, {@code column})
+     * is a legal Sudoku move.
+     *
+     * <p>A move is considered valid when ALL of the following hold:</p>
+     * <ul>
+     *   <li>Row and column are within the 0–8 range.</li>
+     *   <li>Value is between 1 and 9 (inclusive).</li>
+     *   <li>The target cell is not fixed.</li>
+     *   <li>The value does not already appear in the same row.</li>
+     *   <li>The value does not already appear in the same column.</li>
+     *   <li>The value does not already appear in the same 3×3 box.</li>
+     * </ul>
+     *
+     * <p>When checking row/column/box conflicts, the target cell itself is
+     * excluded so that re-placing the same value on its own non-fixed cell
+     * is considered valid.</p>
+     *
+     * @param row    zero-based row index (0–8)
+     * @param column zero-based column index (0–8)
+     * @param value  the digit to place (1–9)
+     * @return {@code true} if the move is legal; {@code false} otherwise
+     */
+    public boolean isMovementValid(final int row, final int column, final int value) {
+        if (!isInBounds(row, column)) {
+            return false;
+        }
+        if (value < 1 || value > SIZE) {
+            return false;
+        }
+        if (fixedCells[row][column]) {
+            return false;
+        }
+        return !isValueInRow(row, column, value)
+                && !isValueInColumn(row, column, value)
+                && !isValueInBox(row, column, value);
+    }
+
+    /**
+     * Returns {@code true} when both row and column are within the valid 0–8 range.
+     *
+     * @param row    zero-based row index
+     * @param column zero-based column index
+     * @return {@code true} if coordinates are in bounds
+     */
+    private boolean isInBounds(final int row, final int column) {
+        return row >= 0 && row < SIZE && column >= 0 && column < SIZE;
+    }
+
+    /**
+     * Returns {@code true} if {@code value} already appears in {@code row},
+     * excluding the target cell itself.
+     *
+     * @param row    zero-based row index
+     * @param column zero-based column of the target cell (excluded from check)
+     * @param value  digit to look for
+     * @return {@code true} if the row already contains the value
+     */
+    private boolean isValueInRow(final int row, final int column, final int value) {
+        for (int col = 0; col < SIZE; col++) {
+            if (col != column && board[row][col] == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns {@code true} if {@code value} already appears in {@code column},
+     * excluding the target cell itself.
+     *
+     * @param row    zero-based row of the target cell (excluded from check)
+     * @param column zero-based column index
+     * @param value  digit to look for
+     * @return {@code true} if the column already contains the value
+     */
+    private boolean isValueInColumn(final int row, final int column, final int value) {
+        for (int r = 0; r < SIZE; r++) {
+            if (r != row && board[r][column] == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns {@code true} if {@code value} already appears in the 3×3 box
+     * that contains ({@code row}, {@code column}), excluding the target cell.
+     *
+     * @param row    zero-based row index
+     * @param column zero-based column index
+     * @param value  digit to look for
+     * @return {@code true} if the 3×3 box already contains the value
+     */
+    private boolean isValueInBox(final int row, final int column, final int value) {
+        final int boxStartRow = (row / 3) * 3;
+        final int boxStartCol = (column / 3) * 3;
+        for (int r = boxStartRow; r < boxStartRow + 3; r++) {
+            for (int col = boxStartCol; col < boxStartCol + 3; col++) {
+                if ((r != row || col != column) && board[r][col] == value) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

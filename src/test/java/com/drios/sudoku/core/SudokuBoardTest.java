@@ -118,4 +118,90 @@ class SudokuBoardTest {
     void isCellFixed_should_returnFalse_when_cellWasNeverSet() {
         assertFalse(board.isCellFixed(7, 3));
     }
+
+    // -------------------------------------------------------------------------
+    // isMovementValid — T005
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("isMovementValid_should_returnTrue_when_moveIsLegal")
+    void isMovementValid_should_returnTrue_when_moveIsLegal() {
+        // Empty board: any value 1-9 in any cell is valid
+        assertTrue(board.isMovementValid(0, 0, 5));
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_valueAlreadyInSameRow")
+    void isMovementValid_should_returnFalse_when_valueAlreadyInSameRow() {
+        board.setValue(0, 3, 7, false);
+        assertFalse(board.isMovementValid(0, 8, 7),
+                "Value 7 already in row 0 at column 3");
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_valueAlreadyInSameColumn")
+    void isMovementValid_should_returnFalse_when_valueAlreadyInSameColumn() {
+        board.setValue(2, 5, 4, false);
+        assertFalse(board.isMovementValid(7, 5, 4),
+                "Value 4 already in column 5 at row 2");
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_valueAlreadyInSameBox")
+    void isMovementValid_should_returnFalse_when_valueAlreadyInSameBox() {
+        // top-left box: rows 0-2, cols 0-2
+        board.setValue(1, 1, 9, false);
+        assertFalse(board.isMovementValid(0, 2, 9),
+                "Value 9 already in the top-left 3x3 box");
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_valueIsZero")
+    void isMovementValid_should_returnFalse_when_valueIsZero() {
+        assertFalse(board.isMovementValid(0, 0, 0));
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_valueIsGreaterThanNine")
+    void isMovementValid_should_returnFalse_when_valueIsGreaterThanNine() {
+        assertFalse(board.isMovementValid(0, 0, 10));
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_valueIsNegative")
+    void isMovementValid_should_returnFalse_when_valueIsNegative() {
+        assertFalse(board.isMovementValid(0, 0, -1));
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_cellIsFixed")
+    void isMovementValid_should_returnFalse_when_cellIsFixed() {
+        board.setValue(3, 3, 6, true);
+        assertFalse(board.isMovementValid(3, 3, 1),
+                "Cell [3][3] is fixed and must not be modified");
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_rowIsOutOfRange")
+    void isMovementValid_should_returnFalse_when_rowIsOutOfRange() {
+        assertFalse(board.isMovementValid(9, 0, 5));
+        assertFalse(board.isMovementValid(-1, 0, 5));
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnFalse_when_columnIsOutOfRange")
+    void isMovementValid_should_returnFalse_when_columnIsOutOfRange() {
+        assertFalse(board.isMovementValid(0, 9, 5));
+        assertFalse(board.isMovementValid(0, -1, 5));
+    }
+
+    @Test
+    @DisplayName("isMovementValid_should_returnTrue_when_sameValuePlacedOnItsOwnCell")
+    void isMovementValid_should_returnTrue_when_sameValuePlacedOnItsOwnCell() {
+        // Placing a value on the cell that already holds it (re-confirming)
+        // should not conflict with itself in row/col/box checks
+        board.setValue(4, 4, 3, false);
+        assertTrue(board.isMovementValid(4, 4, 3),
+                "Placing the same value on its own non-fixed cell should be valid");
+    }
 }
