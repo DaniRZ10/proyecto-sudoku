@@ -8,6 +8,8 @@
 classDiagram
     class Main {
         +main(args: String[]) void
+        -launchCli() void
+        -launchGui() void
     }
 
     class Difficulty {
@@ -23,21 +25,21 @@ classDiagram
         -fixedCells: boolean[9][9]
         +SudokuBoard()
         +getValue(row: int, column: int) int
-        +setValue(row: int, column: int, value: int) void
+        +setValue(row: int, column: int, value: int, fixed: boolean) void
         +isCellFixed(row: int, column: int) boolean
-        +setCellFixed(row: int, column: int, fixed: boolean) void
         +isMovementValid(row: int, column: int, value: int) boolean
         +placeNumber(row: int, column: int, value: int) void
         +isSolved() boolean
         +printBoard() void
-        +printBoard(out: PrintStream) void
+        +printBoard(ps: PrintStream) void
     }
 
     class SudokuGenerator {
         +generateBoard(difficulty: Difficulty) SudokuBoard
-        -generateFullBoard() int[9][9]
-        -solve(board: int[9][9]) boolean
+        ~generateFullBoard() int[9][9]
+        ~solve(board: int[9][9]) boolean
         -carveCells(board: int[9][9], emptyCount: int) void
+        -isSafe(board: int[9][9], row: int, col: int, digit: int) boolean
     }
 
     class SudokuGame {
@@ -46,13 +48,23 @@ classDiagram
         -out: PrintStream
         +SudokuGame(in: Scanner, out: PrintStream)
         +start() void
+        -selectDifficulty() Difficulty
+        -play() void
     }
 
     class SudokuGUI {
-        -board: SudokuBoard
         -frame: JFrame
         -cells: JTextField[9][9]
+        -difficultyCombo: JComboBox
+        -newGameButton: JButton
+        -generator: SudokuGenerator
+        -board: SudokuBoard
+        -isRendering: boolean
+        +SudokuGUI()
         +launch() void
+        -startNewGame() void
+        -renderBoard() void
+        -validateCell(r: int, c: int) void
     }
 
     class InvalidMoveException {
