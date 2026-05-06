@@ -107,6 +107,10 @@ public class SudokuGUI {
             if (value >= 1 && value <= 9 && board.isMovementValid(r, c, value)) {
                 board.placeNumber(r, c, value);
                 cell.setBackground(Color.WHITE);
+                
+                if (board.isSolved()) {
+                    JOptionPane.showMessageDialog(frame, "Congratulations! You solved the Sudoku!");
+                }
             } else {
                 cell.setBackground(COLOR_INVALID);
             }
