@@ -205,6 +205,25 @@ class SudokuGeneratorTest {
         assertEquals(54, countEmptyCells(board), "HARD difficulty must have 54 empty cells");
     }
 
+    @Test
+    @DisplayName("generateBoard_should_markCellsAsFixedOnlyIfTheyHaveValue")
+    void generateBoard_should_markCellsAsFixedOnlyIfTheyHaveValue() {
+        final SudokuBoard board = generator.generateBoard(Difficulty.MEDIUM);
+
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                final int value = board.getValue(r, c);
+                final boolean isFixed = board.isCellFixed(r, c);
+
+                if (value == SudokuBoard.EMPTY_CELL) {
+                    assertFalse(isFixed, "Empty cell at [" + r + "][" + c + "] must NOT be fixed");
+                } else {
+                    assertTrue(isFixed, "Filled cell at [" + r + "][" + c + "] must be fixed");
+                }
+            }
+        }
+    }
+
     /** Helper to count cells with value 0 in a SudokuBoard. */
     private int countEmptyCells(final SudokuBoard board) {
         int empty = 0;
