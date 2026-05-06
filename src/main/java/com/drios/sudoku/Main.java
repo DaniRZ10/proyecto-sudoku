@@ -1,6 +1,7 @@
 package com.drios.sudoku;
 
 import com.drios.sudoku.game.SudokuGame;
+import com.drios.sudoku.ui.SudokuGUI;
 
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -48,9 +49,7 @@ public class Main {
      * Launches the GUI game.
      */
     private static void launchGui() {
-        // SudokuGUI implementation will be added in Phase 4 (T022)
-        System.out.println("GUI mode requested, but it's not implemented yet.");
-        System.out.println("Launching CLI mode instead...");
-        launchCli();
+        final SudokuGUI gui = new SudokuGUI();
+        gui.launch();
     }
 }
