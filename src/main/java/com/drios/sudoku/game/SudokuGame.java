@@ -80,6 +80,13 @@ public class SudokuGame {
                 final int val = in.nextInt();
 
                 board.placeNumber(row, col, val);
+                
+                if (board.isSolved()) {
+                    out.println("\nCurrent Board:");
+                    board.printBoard(out);
+                    out.println("\nCongratulations! You solved the Sudoku!");
+                    break;
+                }
             } catch (NumberFormatException e) {
                 out.println("Invalid input. Please enter 'row col value' (e.g., 0 0 5) or 'quit'.");
                 in.nextLine(); // consume remaining line
