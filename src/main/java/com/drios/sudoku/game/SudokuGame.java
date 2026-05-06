@@ -46,10 +46,48 @@ public class SudokuGame {
         out.println("Generating " + difficulty + " board...");
         this.board = generator.generateBoard(difficulty);
         
-        out.println("\nInitial Board:");
-        board.printBoard(out);
-        
-        // Main loop will be implemented in T018
+        play();
+    }
+
+    /**
+     * Main gameplay loop.
+     *
+     * <p>Repeatedly prints the board and processes player commands
+     * until the board is solved or the player quits.</p>
+     */
+    private void play() {
+        while (true) {
+            out.println("\nCurrent Board:");
+            board.printBoard(out);
+
+            if (board.isSolved()) {
+                out.println("\nCongratulations! You solved the Sudoku!");
+                break;
+            }
+
+            out.println("\nEnter move (row col value) or 'quit' to exit:");
+            out.print("> ");
+
+            final String input = in.next();
+            if ("quit".equalsIgnoreCase(input)) {
+                out.println("Game abandoned. See you next time!");
+                break;
+            }
+
+            try {
+                final int row = Integer.parseInt(input);
+                final int col = in.nextInt();
+                final int val = in.nextInt();
+
+                board.placeNumber(row, col, val);
+            } catch (NumberFormatException e) {
+                out.println("Invalid input. Please enter 'row col value' (e.g., 0 0 5) or 'quit'.");
+                in.nextLine(); // consume remaining line
+            } catch (Exception e) {
+                out.println("Error: " + e.getMessage());
+                in.nextLine(); // consume remaining line
+            }
+        }
     }
 
     /**
