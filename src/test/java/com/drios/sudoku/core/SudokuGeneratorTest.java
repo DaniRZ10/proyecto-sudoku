@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -143,5 +145,38 @@ class SudokuGeneratorTest {
 
         assertFalse(generator.solve(blocked),
                 "No digit fits [8][8]: 1-8 blocked by row 8, 9 blocked by col 8");
+    }
+
+    // -------------------------------------------------------------------------
+    // T012 — generateFullBoard()
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("generateFullBoard_should_produceValidSolvedGrid")
+    void generateFullBoard_should_produceValidSolvedGrid() {
+        final int[][] grid = generator.generateFullBoard();
+
+        // Verify dimensions
+        assertEquals(9, grid.length);
+        assertEquals(9, grid[0].length);
+
+        // Verify it passes SudokuBoard.isSolved()
+        final SudokuBoard board = new SudokuBoard();
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                board.setValue(r, c, grid[r][c], true);
+            }
+        }
+        assertTrue(board.isSolved(), "The generated full board must be a valid solution");
+    }
+
+    @Test
+    @DisplayName("generateFullBoard_should_produceDifferentBoards_when_calledTwice")
+    void generateFullBoard_should_produceDifferentBoards_when_calledTwice() {
+        final int[][] grid1 = generator.generateFullBoard();
+        final int[][] grid2 = generator.generateFullBoard();
+
+        assertFalse(Arrays.deepEquals(grid1, grid2),
+                "Two consecutive generations should produce different boards (randomization)");
     }
 }

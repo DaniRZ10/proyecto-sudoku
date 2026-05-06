@@ -1,5 +1,9 @@
 package com.drios.sudoku.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Generates valid Sudoku puzzles of varying difficulty.
  *
@@ -93,7 +97,13 @@ public class SudokuGenerator {
         for (int row = 0; row < SudokuBoard.SIZE; row++) {
             for (int col = 0; col < SudokuBoard.SIZE; col++) {
                 if (board[row][col] == SudokuBoard.EMPTY_CELL) {
-                    for (int digit = 1; digit <= SudokuBoard.SIZE; digit++) {
+                    final List<Integer> digits = new ArrayList<>(SudokuBoard.SIZE);
+                    for (int i = 1; i <= SudokuBoard.SIZE; i++) {
+                        digits.add(i);
+                    }
+                    Collections.shuffle(digits);
+
+                    for (int digit : digits) {
                         if (isSafe(board, row, col, digit)) {
                             board[row][col] = digit;
                             if (solve(board)) {
