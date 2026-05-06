@@ -34,9 +34,10 @@ classDiagram
 
     class SudokuGenerator {
         +generateBoard(difficulty: Difficulty) SudokuBoard
-        -generateFullBoard() int[9][9]
-        -solve(board: int[9][9]) boolean
+        ~generateFullBoard() int[9][9]
+        ~solve(board: int[9][9]) boolean
         -carveCells(board: int[9][9], emptyCount: int) void
+        -isSafe(board: int[9][9], row: int, col: int, digit: int) boolean
     }
 
     class SudokuGame {
