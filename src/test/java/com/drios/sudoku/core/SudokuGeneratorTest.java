@@ -179,4 +179,42 @@ class SudokuGeneratorTest {
         assertFalse(Arrays.deepEquals(grid1, grid2),
                 "Two consecutive generations should produce different boards (randomization)");
     }
+
+    // -------------------------------------------------------------------------
+    // T013 — generateBoard(Difficulty) cell carving
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("generateBoard_should_haveExactly36EmptyCells_when_Easy")
+    void generateBoard_should_haveExactly36EmptyCells_when_Easy() {
+        final SudokuBoard board = generator.generateBoard(Difficulty.EASY);
+        assertEquals(36, countEmptyCells(board), "EASY difficulty must have 36 empty cells");
+    }
+
+    @Test
+    @DisplayName("generateBoard_should_haveExactly46EmptyCells_when_Medium")
+    void generateBoard_should_haveExactly46EmptyCells_when_Medium() {
+        final SudokuBoard board = generator.generateBoard(Difficulty.MEDIUM);
+        assertEquals(46, countEmptyCells(board), "MEDIUM difficulty must have 46 empty cells");
+    }
+
+    @Test
+    @DisplayName("generateBoard_should_haveExactly54EmptyCells_when_Hard")
+    void generateBoard_should_haveExactly54EmptyCells_when_Hard() {
+        final SudokuBoard board = generator.generateBoard(Difficulty.HARD);
+        assertEquals(54, countEmptyCells(board), "HARD difficulty must have 54 empty cells");
+    }
+
+    /** Helper to count cells with value 0 in a SudokuBoard. */
+    private int countEmptyCells(final SudokuBoard board) {
+        int empty = 0;
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (board.getValue(r, c) == SudokuBoard.EMPTY_CELL) {
+                    empty++;
+                }
+            }
+        }
+        return empty;
+    }
 }
