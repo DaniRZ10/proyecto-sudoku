@@ -8,6 +8,8 @@
 classDiagram
     class Main {
         +main(args: String[]) void
+        -launchCli() void
+        -launchGui() void
     }
 
     class Difficulty {
@@ -46,13 +48,23 @@ classDiagram
         -out: PrintStream
         +SudokuGame(in: Scanner, out: PrintStream)
         +start() void
+        -selectDifficulty() Difficulty
+        -play() void
     }
 
     class SudokuGUI {
-        -board: SudokuBoard
         -frame: JFrame
         -cells: JTextField[9][9]
+        -difficultyCombo: JComboBox
+        -newGameButton: JButton
+        -generator: SudokuGenerator
+        -board: SudokuBoard
+        -isRendering: boolean
+        +SudokuGUI()
         +launch() void
+        -startNewGame() void
+        -renderBoard() void
+        -validateCell(r: int, c: int) void
     }
 
     class InvalidMoveException {
